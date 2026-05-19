@@ -31,6 +31,9 @@ jobs:
             - name: Type check
               run: npm run compile
 
+            - name: Run tests
+              run: npm test
+
     build:
         name: Build & Package
         runs-on: ubuntu-latest
