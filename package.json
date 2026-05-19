@@ -17,9 +17,13 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "format": "biome format --write src/",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.15",
     "typescript": "^5.9.2",
     "wxt": "^0.20.6"
   }
