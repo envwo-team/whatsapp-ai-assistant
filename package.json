@@ -2,7 +2,7 @@
   "name": "whatsapp-ai-assistant",
   "description": "A Chrome extensions that enhances WhatsApp Web with AI-powered features",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "M Anas Latif",
     "email": "contact@anaslatif.dev",
