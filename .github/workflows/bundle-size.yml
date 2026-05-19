@@ -1,0 +1,48 @@
+name: Bundle Size Check
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    size:
+        name: Check Bundle Size
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build extension
+              run: npm run build
+
+            - name: Calculate bundle size
+              id: size
+              run: |
+                  SIZE=$(du -sh .output/chrome-mv3 | cut -f1)
+                  echo "size=$SIZE" >> "$GITHUB_OUTPUT"
+                  echo "## Bundle Size: $SIZE" >> "$GITHUB_STEP_SUMMARY"
+
+                  # List top files by size
+                  echo "### Largest files:" >> "$GITHUB_STEP_SUMMARY"
+                  echo '```' >> "$GITHUB_STEP_SUMMARY"
+                  find .output/chrome-mv3 -type f -exec du -h {} + | sort -rh | head -15 >> "$GITHUB_STEP_SUMMARY"
+                  echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+            - name: Comment PR with size
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                  header: bundle-size
+                  message: |
+                      ## 📦 Bundle Size: `${{ steps.size.outputs.size }}`
+                      <details>
+                      <summary>See build output details in job summary</summary>
+                      Check the workflow run summary for detailed file breakdown.
+                      </details>
